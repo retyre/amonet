@@ -77,7 +77,7 @@ def main():
         log("rpmb looks broken; if this is expected (i.e. you're retrying the exploit) press enter, otherwise terminate with Ctrl+C")
         input()
 
-    # 4) Zero out rpmb to enable downgrade or unbrick from anti-rollback
+    # 4) Zero out rpmb to enable downgrade
     log("Downgrade rpmb")
     dev.rpmb_write(b"\x00" * 0x100)
     log("Recheck rpmb")
@@ -86,6 +86,35 @@ def main():
         dev.reboot()
         raise RuntimeError("downgrade failure, giving up")
     log("rpmb downgrade ok")
+
+    # 5) Install lk-payload
+    log("Flash lk-payload")
+    switch_boot0(dev)
+    flash_binary(dev, "../lk-payload/build/payload.bin", 0x200000 // 0x200)
+
+    # 6) Downgrade preloader
+    log("Flash preloader")
+    switch_boot0(dev)
+    flash_binary(dev, "../bin/boot0-short.bin", 0)
+
+    # 7) Downgrade tz
+    log("Flash tz")
+    switch_user(dev)
+    flash_binary(dev, "../bin/tz.bin", gpt["tee1"][0], gpt["tee1"][1] * 0x200)
+
+    # 8) Downgrade lk
+    log("Flash lk")
+    switch_user(dev)
+    flash_binary(dev, "../bin/lk.bin", gpt["lk"][0], gpt["lk"][1] * 0x200)
+
+    # 9) Flash microloader
+    log("Inject microloader")
+    switch_user(dev)
+    flash_binary(dev, "../bin/microloader.bin", gpt["boot"][0], gpt["boot"][1] * 0x200)
+
+    # Reboot (to fastboot)
+    log("Reboot to unlocked fastboot")
+    dev.reboot()
 
 
 if __name__ == "__main__":
