@@ -1,8 +1,8 @@
 # amonet
 
-This is an exploit chain for Fire HD 10 (2017) (7th gen / suez / KFSUWI). It contains a MediaTek bootrom exploit.
+This is an exploit chain for Fire HD 8 (2018) (8th gen / karnak / KFKAWI). It contains a MediaTek bootrom exploit and a LittleKernel bootloader exploit.
 
-For installation instructions, see https://forum.xda-developers.com/hd8-hd10/development/2017-fire-hd-10-unbricking-anti-rollback-t3896616
+For installation instructions, see https://forum.xda-developers.com/hd8-hd10/orig-development/fire-hd-8-2018-downgrade-unlock-root-t3894256
 
 ## License
 
