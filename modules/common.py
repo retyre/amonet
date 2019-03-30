@@ -8,7 +8,7 @@ import serial
 from logger import log
 
 BAUD = 115200
-TIMEOUT = 5
+TIMEOUT = 10
 
 
 CRYPTO_BASE = 0x10210000 # for suez
